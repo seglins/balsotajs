@@ -1,0 +1,17 @@
+.page-content {
+  $primary: #2f9cf1;
+
+  @import 'bootstrap/scss/bootstrap';
+
+  ol,
+  ul {
+    li {
+      ol,
+      ul {
+        padding-top: 5px;
+      }
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+}
