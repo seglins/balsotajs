@@ -1,8 +1,10 @@
 const router = require('express').Router()
 const controller = require('../controllers/auth.controller')
-const { requireAuth } = require('../middleware')
+const { requireAuth, clientIp, accessLogger } = require('../middleware')
 
-router.post('/', controller.login)
-router.get('/', requireAuth, (req, res) => res.status(200).end())
+router.post('/', [clientIp, accessLogger], controller.login)
+router.get('/', [clientIp, accessLogger, requireAuth], (req, res) =>
+  res.status(200).end()
+)
 
 module.exports = router

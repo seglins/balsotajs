@@ -9,7 +9,7 @@ exports.get = (req, res, next) => {
 
 exports.create = (req, res, next) => {
   voteService
-    .createOne(req.body)
+    .createOne({ ...req.body, ip: req.clientIp })
     .then((vote) => res.status(200).json(vote))
     .catch((error) => next(error))
 }

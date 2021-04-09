@@ -22,6 +22,9 @@ const schema = new mongoose.Schema({
     ref: 'Party',
     required: [true, 'Party is required']
   },
+  ip: {
+    type: String
+  },
   created: {
     type: Date,
     immutable: true,

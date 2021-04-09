@@ -7,6 +7,24 @@ const createOne = async (data) => {
   const error = new Error()
   error.name = 'ValidationError'
 
+  const pastDay = new Date()
+  pastDay.setHours(pastDay.getHours() - 24)
+
+  if (data.ip) {
+    const existingVote = await baseService.getOne({
+      ip: data.ip,
+      created: { $gte: pastDay },
+    })
+
+    if (existingVote) {
+      error.message = 'IP address has already been used to vote within last 24 hours'
+      throw error
+    }
+  } else {
+    error.message = 'IP address is missing'
+    throw error
+  }
+
   if (!data.birthYear) {
     error.message = 'Birth year is missing'
     throw error
@@ -57,16 +75,13 @@ const createOne = async (data) => {
 
     const partiesWithinRegion = []
 
-    const previousDay = new Date()
-    previousDay.setHours(previousDay.getHours() - 24)
-
     region = await regionService.getOne(data.region, 'parties')
 
     for (let party of region.parties) {
       const count = await baseService.getCount({
         party: party.id,
         region: data.region,
-        created: { $gte: previousDay },
+        created: { $gte: pastDay },
       })
 
       partiesWithinRegion.push({
@@ -94,7 +109,7 @@ const get = async () => {
   try {
     return await baseService.get({}, [
       { path: 'party', select: 'id color name slug' },
-      { path: 'region', select: 'id name slug' }
+      { path: 'region', select: 'id name slug' },
     ])
   } catch (error) {
     throw error

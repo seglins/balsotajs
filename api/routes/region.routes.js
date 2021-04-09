@@ -1,11 +1,11 @@
 const router = require('express').Router()
 const controller = require('../controllers/region.controller')
-const { requireAuth } = require('../middleware')
+const { requireAuth, clientIp, accessLogger } = require('../middleware')
 
 router.get(['/', '/:id'], controller.get)
-router.post('/', requireAuth, controller.create)
-router.put('/:id', requireAuth, controller.update)
-router.delete('/:id', requireAuth, controller.delete)
-// router.post('/:id/party', requireAuth, controller.addParty)
+router.post('/', [clientIp, accessLogger, requireAuth], controller.create)
+router.put('/:id', [clientIp, accessLogger, requireAuth], controller.update)
+router.delete('/:id', [clientIp, accessLogger, requireAuth], controller.delete)
+// router.post('/:id/party', [clientIp, accessLogger, requireAuth], controller.addParty)
 
 module.exports = router

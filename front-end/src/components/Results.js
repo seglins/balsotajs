@@ -18,12 +18,12 @@ const Results = ({ parties, onBack, aboutPage }) => {
         Pēdējās 24h balsojušo sadalījums:
       </Text>
       <ResultChart parties={parties} />
-      <Flex flex={['column', 'row']} wrap="wrap" justify={['center', 'right']} align="center">
+      <Flex direction={{ base: 'column', md: 'row' }} justify={{ base: 'center', md: 'flex-end' }} align="center">
         <Button
           onClick={onBack}
           color="brand.500"
           mb="10px"
-          mr={['0', (aboutPage) ? '30px' : '0']}
+          mr={{ base: '0', md: (aboutPage) ? '30px' : '0' }}
           variant="unstyled"
         >
           Atpakaļ uz sākumu

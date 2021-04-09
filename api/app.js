@@ -4,10 +4,12 @@ const cors = require('cors')
 const config = require('./config')
 const db = require('./db')
 const routes = require('./routes')
-const { errorHandler, tokenExtractor, requireAuth } = require('./middleware')
+const { errorHandler, errorLogger, tokenExtractor } = require('./middleware')
+
 const app = express()
 
 db.connect()
+
 app.use(cors())
 app.use(helmet())
 app.use(express.json())
@@ -20,6 +22,7 @@ app.use('/pages', routes.page)
 app.use('/votes', routes.vote)
 app.use('/auth', routes.auth)
 
+app.use(errorLogger)
 app.use(errorHandler)
 app.use('*', (req, res) => res.status(404).end())
 app.listen(config.PORT, () => console.log(`App running on ${config.PORT}`))
